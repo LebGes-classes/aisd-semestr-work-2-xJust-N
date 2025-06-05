@@ -1,0 +1,4 @@
+/floyd-warshall/.vs
+*.log
+/floyd-warshall/x64/Debug
+*.tlog
