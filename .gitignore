@@ -2,3 +2,4 @@
 *.log
 /floyd-warshall/x64/Debug
 *.tlog
+/floyd-warshall/Debug

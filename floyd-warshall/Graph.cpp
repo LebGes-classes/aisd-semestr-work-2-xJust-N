@@ -1,6 +1,8 @@
+#include <algorithm>
+#include <iostream>
+
 #include "Graph.h"
 
-#include <algorithm>
 Graph::Graph() : vertexCount(0), changed(true) {}
 
 Graph::Graph(int size) : vertexCount(size), changed(true) {
@@ -32,12 +34,20 @@ void Graph::addVertex(int i, int j, int length) {
 	if (max_index >= vertexCount) {
 		extendMatrix(max_index - vertexCount + 1);
 	}
-	vertexMatrix[i][j] = length;
-	changed = true;
+
+	if(i != j)
+	{
+		vertexMatrix[i][j] = length;
+		changed = true;
+	}
+	else {
+		vertexMatrix[i][j] = 0;
+	}
+
 }
 
 void Graph::removeVertex(int i, int j) {
-	if (i < vertexCount && j < vertexCount) {
+	if (i < vertexCount && j < vertexCount && i != j) {
 		vertexMatrix[i][j] = INF;
 		changed = true;
 	}
@@ -50,24 +60,19 @@ int Graph::findShortestWay(int i, int j) {
 		return 0;
 
 	if (changed) {
+		//клонирование матрицы путей
 		k_vector = vertexMatrix;
 
-		for (int k = 0; k < vertexCount; ++k) {
-			for (int a = 0; a < vertexCount; ++a) {
-				
-				if (k_vector[a][k] == INF) 
+		for (int k = 0; k < vertexCount; k++) {
+			for (int i = 0; i < vertexCount; i++) {
+				//дл€ исключени€ переполнени€ int
+				if (k_vector[i][k] == INF) 
 					continue;
 
-				for (int b = 0; b < vertexCount; ++b) {
-					
-					if (k_vector[k][b] != INF) {
-						int new_path = k_vector[a][k] + k_vector[k][b];
-					
-						if (new_path < 0) 
-							continue;
-						if (k_vector[a][b] > new_path) {
-							k_vector[a][b] = new_path;
-						}
+				for (int j = 0; j < vertexCount; j++) {
+					//дл€ исключени€ переполнени€ int
+					if (k_vector[k][j] != INF) {
+						k_vector[i][j] = std::min(k_vector[i][k] + k_vector[k][j], k_vector[i][j]);
 					}
 				}
 			}
@@ -76,4 +81,17 @@ int Graph::findShortestWay(int i, int j) {
 	}
 
 	return (k_vector[i][j] == INF) ? -1 : k_vector[i][j];
+}
+
+void Graph::printInfo()
+{
+	std::cout << "All shortest ways(-1 if way does not exists)" << std::endl;
+	for (int i = 0; i < vertexCount; i++)
+	{
+		for (int j = 0; j < vertexCount; j++)
+		{
+			std::cout << "Way " << i << " -> " << j << ": " << findShortestWay(i, j) << std::endl;
+
+		}
+	}
 }

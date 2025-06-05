@@ -19,5 +19,6 @@ public:
 	void addVertex(int i, int j, int length);
 	void removeVertex(int i, int j);
 	int findShortestWay(int i, int j);
+	void printInfo();
 };
 
