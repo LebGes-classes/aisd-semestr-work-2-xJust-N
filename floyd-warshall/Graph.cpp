@@ -65,12 +65,10 @@ int Graph::findShortestWay(int i, int j) {
 
 		for (int k = 0; k < vertexCount; k++) {
 			for (int i = 0; i < vertexCount; i++) {
-				//для исключения переполнения int
 				if (k_vector[i][k] == INF) 
 					continue;
 
 				for (int j = 0; j < vertexCount; j++) {
-					//для исключения переполнения int
 					if (k_vector[k][j] != INF) {
 						k_vector[i][j] = std::min(k_vector[i][k] + k_vector[k][j], k_vector[i][j]);
 					}
